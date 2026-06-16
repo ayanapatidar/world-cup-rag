@@ -56,7 +56,7 @@ class FootballDataClient:
         if cache_file and cache_file.exists() and not refresh:
             return json.loads(cache_file.read_text())
     
-        raw = self._request_with_retry(path, params)
+        raw = self._request(path, params)
     
         if cache_file:
             cache_file.write_text(json.dumps(raw, indent=2))

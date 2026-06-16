@@ -29,9 +29,9 @@ class MatchStatus(str, Enum):
     AWARDED   = "AWARDED"
 
 class Team(BaseModel):
-    id:   int
-    name: str
-    tla:  str 
+    id:   int | None = None 
+    name: str | None = None 
+    tla:  str | None = None 
 
 class Score(BaseModel):
     winner:   str | None = None     # if pulling data from a scheduled match
@@ -51,3 +51,14 @@ class Match(BaseModel):
     away: Team
     score: Score
     last_updated: datetime
+
+class Article(BaseModel):
+    id: str
+    match_id: int                # maybe something to be said about the two match_ids getting the same article. brainstorm
+    source: str = "guardian"     # future-proofing! thinking of maybe scraping the bbc at some point
+    title: str
+    body: str
+    byline: str | None = None
+    article_type: str | None = None
+    url: str
+    published: datetime

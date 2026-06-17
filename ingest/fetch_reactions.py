@@ -14,10 +14,11 @@ from pathlib import Path
 from datetime import timedelta
 
 import requests
- 
+
+from ingest.base_client import CachedJSONClient
 from models import Article, Match
 
-class GuardianClient:
+class GuardianClient(CachedJSONClient):
     BASE_URL = "https://content.guardianapis.com"
     SECTION = "football"
  
@@ -26,18 +27,15 @@ class GuardianClient:
         api_key: str | None = None,
         cache_dir: Path = Path("data/raw"),
     ) -> None:
+        super().__init__(cache_dir)
         api_key = api_key or os.environ.get("GUARDIAN_API_KEY")
         if not api_key:
             raise ValueError(
                 "No Guardian API key found. Set GUARDIAN_API_KEY in your .env "
                 "(free key at open-platform.theguardian.com), or pass api_key=."
             )
-        self.session = requests.Session()
         self.session.params = {"api-key": api_key}
  
-        self.cache_dir = cache_dir
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
-
     def get_match_reactions(
         self,
         match: Match,
@@ -84,37 +82,6 @@ class GuardianClient:
             if article is not None:  
                 articles.append(article)
         return articles
-    
-    def _get(
-        self,
-        path: str,
-        params: dict | None = None,
-        cache_key: str | None = None,
-        refresh: bool = False,
-    ) -> dict:
-        
-        cache_file = self.cache_dir / f"{cache_key}.json" if cache_key else None
- 
-        if cache_file and cache_file.exists() and not refresh:
-            return json.loads(cache_file.read_text())
- 
-        raw = self._request(path, params)
- 
-        if cache_file:
-            cache_file.write_text(json.dumps(raw, indent=2))
-        return raw
-    
-    def _request(
-            self, 
-            path: str, 
-            params: dict | None = None
-        ) -> dict:
-        
-        resp = self.session.get(f"{self.BASE_URL}{path}", params=params, timeout=30)
-        resp.raise_for_status()
-        return resp.json()
-    
-    # last two functions are lowkey redundant... refactor maybe if they come up again??? 
     
     @staticmethod
     def _to_article(raw: dict, match_id: int) -> Article | None:

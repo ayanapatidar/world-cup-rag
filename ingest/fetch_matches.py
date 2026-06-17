@@ -13,6 +13,7 @@ from pathlib import Path
 import requests
  
 from models import Match, Score, Team
+from ingest.base_client import CachedJSONClient
 
 
 class FootballDataClient:
@@ -24,16 +25,13 @@ class FootballDataClient:
             api_key: str | None = None,
             cache_dir: Path = Path("data/raw"),
         ) -> None:
+        super().__init__(cache_dir)
         api_key = api_key or os.environ.get("FOOTBALL_DATA_API_KEY")
         if not api_key:
             raise ValueError(
                 "No football-data.org API key found. Set FOOTBALL_DATA_API_KEY in your .env (free key at football-data.org), or pass api_key=."
             )
-        self.session = requests.Session()
         self.session.headers.update({"X-Auth-Token": api_key})
-    
-        self.cache_dir = cache_dir
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def get_matches(self, *, refresh: bool = False, **filters: str) -> list[Match]:
         raw = self._get(
@@ -43,34 +41,6 @@ class FootballDataClient:
                 refresh=refresh,
             )
         return [self._to_match(m) for m in raw["matches"]]
-
-    def _get(
-            self,
-            path: str,
-            params: dict | None = None,
-            cache_key: str | None = None,
-            refresh: bool = False,
-        ) -> dict:
-        cache_file = self.cache_dir / f"{cache_key}.json" if cache_key else None
-    
-        if cache_file and cache_file.exists() and not refresh:
-            return json.loads(cache_file.read_text())
-    
-        raw = self._request(path, params)
-    
-        if cache_file:
-            cache_file.write_text(json.dumps(raw, indent=2))
-        return raw
-
-    def _request(
-            self, 
-            path: str, 
-            params: dict | None
-        ) -> dict:
-        resp = self.session.get(f"{self.BASE_URL}{path}", params=params, timeout=30)
-        resp.raise_for_status()
-        return resp.json()
-
 
     @staticmethod
     def _to_match(raw: dict) -> Match:

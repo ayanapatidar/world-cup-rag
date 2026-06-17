@@ -69,3 +69,9 @@ class HistoryDoc(BaseModel):
     title: str
     body: str
     url: str | None = None
+
+class Scorer(BaseModel):
+    player_id: int
+    name: str
+    team_name: str 
+    goals: int

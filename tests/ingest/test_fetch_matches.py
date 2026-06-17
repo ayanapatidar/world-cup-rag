@@ -66,3 +66,15 @@ def test_missing_required_field_fails_loud():
         FootballDataClient._to_match(incomplete)
 
  
+MESSI_RAW = {
+    "player": {"id": 10, "name": "Lionel Messi", "nationality": "Argentina"},
+    "team": {"id": 1, "name": "Argentina", "tla": "ARG"},
+    "goals": 8, "assists": 3, "penalties": 1,
+}
+
+def test_to_scorer_maps_full_entry():
+    s = FootballDataClient._to_scorer(MESSI_RAW)
+    assert s.player_id == 10
+    assert s.name == "Lionel Messi"
+    assert s.team_name == "Argentina"
+    assert s.goals == 8

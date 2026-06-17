@@ -62,3 +62,10 @@ class Article(BaseModel):
     article_type: str | None = None
     url: str
     published: datetime
+
+class HistoryDoc(BaseModel):
+    id: str
+    source: str
+    title: str
+    body: str
+    url: str | None = None

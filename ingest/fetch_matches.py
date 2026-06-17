@@ -12,11 +12,11 @@ from pathlib import Path
  
 import requests
  
-from models import Match, Score, Team
+from models import Match, Score, Team, Scorer
 from ingest.base_client import CachedJSONClient
 
 
-class FootballDataClient:
+class FootballDataClient(CachedJSONClient):
     BASE_URL = "https://api.football-data.org/v4"
     COMPETITION = "WC" 
 
@@ -41,6 +41,16 @@ class FootballDataClient:
                 refresh=refresh,
             )
         return [self._to_match(m) for m in raw["matches"]]
+    
+    def get_scorers(self, limit: int = 200, refresh: bool = False) -> list[Scorer]:
+        raw = self._get(
+            f"/competitions/{self.COMPETITION}/scorers",
+            params={"limit": limit},
+            cache_key="wc_scorers",
+            refresh=refresh,
+        )
+        return [self._to_scorer(s) for s in raw["scorers"]]
+
 
     @staticmethod
     def _to_match(raw: dict) -> Match:
@@ -69,5 +79,17 @@ class FootballDataClient:
     @staticmethod
     def _to_team(raw: dict) -> Team:
         return Team(id=raw["id"], name=raw["name"], tla=raw.get("tla"))
+    
+    @staticmethod
+    def _to_scorer(raw: dict) -> Scorer:
+        player = raw["player"]
+        team = raw.get("team")
+        return Scorer(
+            player_id=player["id"],
+            name=player["name"],
+            team_name=team["name"],
+            goals=raw["goals"],
+        )
+
 
 

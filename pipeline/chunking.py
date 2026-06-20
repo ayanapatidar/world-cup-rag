@@ -30,8 +30,8 @@ def chunk(
         return [prefix + body]
  
     body_budget = budget - token_len(prefix)
-    chunks: list[str] = []
-    cur: list[str] = []
+    chunks = []
+    cur = []
     cur_tokens = 0
     for sent in _sentences(body):
         st = token_len(sent)

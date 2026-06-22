@@ -67,10 +67,3 @@ def match_to_text(m: Match) -> str:
         text += f" At half-time it was {m.score.ht_home}-{m.score.ht_away}."
     return text
  
- 
-def article_to_text(a: Article) -> str:
-    return f"{a.title}\n\n{a.body}"
- 
- 
-def history_to_text(h: HistoryDoc) -> str:
-    return f"{h.title}\n\n{h.body}"

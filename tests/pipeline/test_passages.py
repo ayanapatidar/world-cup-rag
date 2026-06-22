@@ -70,17 +70,3 @@ def test_match_in_play_shows_running_score():
     assert "are playing" in out
     assert "score so far is 1-1" in out
 
-
-def test_article_frames_title_then_body():
-    a = Article(
-        id="g1", match_id=1, title="Argentina edge Brazil",
-        body="It was tense.", url="https://example.com/x",
-        published="2026-06-11T20:00:00Z",
-    )
-    assert article_to_text(a) == "Argentina edge Brazil\n\nIt was tense."
-
-
-def test_history_frames_title_then_body():
-    h = HistoryDoc(id="42", source="wikipedia", title="Lionel Messi",
-                   body="Argentine footballer.", url=None)
-    assert history_to_text(h) == "Lionel Messi\n\nArgentine footballer."

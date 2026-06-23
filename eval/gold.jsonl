@@ -1,0 +1,22 @@
+{"query": "What is the Argentina-Brazil football rivalry about?", "layer": "history", "expected": ["3417546", "curated-arg-bra-rivalry"], "verified": true}
+{"query": "Tell me about the history of the Germany national football team.", "layer": "history", "expected": ["250204"], "verified": true}
+{"query": "Who is Lionel Messi?", "layer": "history", "expected": ["2150841", "curated-messi-2022"], "verified": true}
+{"query": "What is the Japan-South Korea football rivalry?", "layer": "history", "expected": ["35622805"], "verified": true}
+{"query": "Tell me about Kylian Mbappe's career.", "layer": "cross", "expected": ["48711857", "football/2026/jun/16/france-senegal-world-cup-kylian-mbappe"], "verified": true}
+{"query": "What is the history of the Brazil national team?", "layer": "history", "expected": ["149286", "3417546", "61160100"], "verified": true}
+{"query": "What is the Mexico-United States soccer rivalry?", "layer": "history", "expected": ["19963889"], "verified": true}
+{"query": "Who is Erling Haaland?", "layer": "history", "expected": ["54333646"], "verified": true}
+{"query": "What was the score of Germany versus Curacao?", "layer": "match", "expected": ["match-537351"], "verified": true}
+{"query": "Did Scotland beat Haiti?", "layer": "cross", "expected": ["match-537340", "football/2026/jun/14/world-cup-scotland-haiti-steve-clarke", "football/2026/jun/14/ben-gannon-doak-scotland-haiti-world-cup-group-c"], "verified": true}
+{"query": "How did the United States do against Paraguay?", "layer": "match", "expected": ["match-537345"], "verified": true}
+{"query": "What was the result of Sweden against Tunisia?", "layer": "match", "expected": ["match-537358"], "verified": true}
+{"query": "Who won the Netherlands versus Japan match?", "layer": "match", "expected": ["match-537357"], "verified": true}
+{"query": "How did Germany perform in the group stage?", "layer": "match", "expected": ["match-537351", "match-537353", "match-537355"], "verified": true}
+{"query": "When does Argentina play in the group stage?", "layer": "match", "expected": ["match-537397", "match-537399", "match-537401"], "verified": true}
+{"query": "What did analysts say about England's bench at the World Cup?", "layer": "reaction", "expected": ["football/2026/jun/18/super-subs-how-englands-bench-applies-a-crucial-finishing-touch"], "verified": true}
+{"query": "How did the Haiti-Scotland match unfold according to reports?", "layer": "cross", "expected": ["football/2026/jun/14/haiti-scotland-world-cup-match-report", "football/2026/jun/14/world-cup-scotland-haiti-steve-clarke"], "verified": true}
+{"query": "What was the reaction to Germany's win over Curacao?", "layer": "reaction", "expected": ["football/2026/jun/14/germany-curacao-world-cup-match-report"], "verified": true}
+{"query": "What are the main talking points from the World Cup so far?", "layer": "reaction", "expected": ["football/datablog/2026/jun/18/numbers-game-stats-that-tell-stories-from-the-first-24-world-cup-matches", "football/2026/jun/13/football-daily-newsletter-world-cup-2026-10-things-we-learned-so-far", "football/2026/jun/11/infantino-rebrand-long-haul-games-five-takeaways-from-world-cup-opener", "football/2026/jun/17/football-daily-greatest-showman-messi-mbappe-haaland"], "verified": true}
+{"query": "How did Sweden's win over Tunisia go?", "layer": "cross", "expected": ["match-537358", "football/2026/jun/15/sweden-tunisia-world-cup-match-report"], "verified": true}
+{"query": "Tell me about Germany at this World Cup, their matches and their history.", "layer": "cross", "expected": ["match-537351", "match-537353", "match-537355", "250204"], "verified": true}
+{"query": "What is the Argentina-Brazil rivalry and how have they done so far?", "layer": "cross", "expected": ["3417546", "curated-arg-bra-rivalry", "match-537397", "match-537399", "match-537401", "match-537341", "match-537339", "match-537343"], "verified": true}

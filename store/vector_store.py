@@ -49,7 +49,7 @@ def upsert_documents(
         raise ValueError(
             f"Unknown collection '{collection_name}'. Valid options: {COLLECTIONS}"
         )
-    if any(len(m) == 0 for m in metadatas):
+    if any(len(m) == 0 for m in metadatas): 
         raise ValueError("All metadata dicts must be non-empty. Use at least one key.")
 
     collection = _get_collection(collection_name)
@@ -108,3 +108,14 @@ def query_all_collections(
 
 def collection_count(collection_name: str) -> int:
     return _get_collection(collection_name).count()
+
+def list_documents(collection_name: str) -> dict:
+    # for labelling
+
+    if collection_name not in COLLECTIONS:
+        raise ValueError(
+            f"Unknown collection '{collection_name}'. Valid options: {COLLECTIONS}"
+        )
+    
+    return _get_collection(collection_name).get(include=["metadatas"])
+ 

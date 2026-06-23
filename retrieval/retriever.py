@@ -6,9 +6,10 @@ from models import SearchResult
  
 RRF_K = 60  # standard RRF smoothing constant
 
-def retrieve(query: str, k: int = 5, pool_per_collection: int = 10) -> list[SearchResult]:
+def retrieve(query: str, k: int = 5, pool_per_collection: int = 10, fuse=None) -> list[SearchResult]:
+    fuse = fuse or _rrf_fuse
     per_collection = vector_store.query_all_collections(query, n_results=pool_per_collection)
-    fused = _rrf_fuse(per_collection)
+    fused = fuse(per_collection)
     fused = _rerank(query, fused)
     return fused[:k]
 

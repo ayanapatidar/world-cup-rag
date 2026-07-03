@@ -1,5 +1,5 @@
 from models import Match, Score, Team, Article, HistoryDoc
-from pipeline.passages import match_to_text, article_to_text, history_to_text
+from pipeline.passages import match_to_text
 
 
 def _match(status="FINISHED", stage="GROUP_STAGE", group=None,
@@ -61,12 +61,12 @@ def test_match_group_label():
 
 def test_match_scheduled_is_a_fixture():
     out = match_to_text(_match(status="SCHEDULED"))
-    assert "scheduled to play" in out
+    assert "scheduled to face" in out
     assert "beat" not in out and "drew" not in out
 
 
 def test_match_in_play_shows_running_score():
     out = match_to_text(_match(status="IN_PLAY", h=1, a=1))
-    assert "are playing" in out
+    assert "are facing" in out
     assert "score so far is 1-1" in out
 

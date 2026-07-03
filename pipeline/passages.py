@@ -41,11 +41,11 @@ def match_to_text(m: Match) -> str:
     h, a = m.score.home, m.score.away
  
     if status in _NOT_STARTED:
-        return (f"{home} are scheduled to play {away} in {stage} of the "
-                f"{TOURNAMENT} on {when}.")
+        return (f"{home} are scheduled to face {away} in the {TOURNAMENT} "
+                f"{stage} on {when}.")
  
-    if status not in _FINISHED:  
-        return (f"{home} are playing {away} in {stage} of the {TOURNAMENT} on "
+    if status not in _FINISHED:
+        return (f"{home} are facing {away} in the {TOURNAMENT} {stage} on "
                 f"{when}; the score so far is {h}-{a}.")
  
     if m.score.duration == "PENALTY_SHOOTOUT":
@@ -62,7 +62,7 @@ def match_to_text(m: Match) -> str:
     else:
         result = f"{home} drew {h}-{a} with {away}"
  
-    text = f"On {when}, in {stage} of the {TOURNAMENT}, {result}."
+    text = f"{result} in the {TOURNAMENT} {stage} on {when}."
     if m.score.ht_home is not None and m.score.ht_away is not None:
         text += f" At half-time it was {m.score.ht_home}-{m.score.ht_away}."
     return text

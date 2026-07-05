@@ -2,7 +2,7 @@ from datetime import datetime
  
 from models import Match, Article, HistoryDoc
  
-TOURNAMENT = "2026 FIFA World Cup"
+TOURNAMENT = "World Cup"
  
 _STAGE_NAMES = {
     "GROUP_STAGE":    "group stage",

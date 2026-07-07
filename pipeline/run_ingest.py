@@ -198,9 +198,12 @@ def ingest_history(*, refresh: bool = False) -> int:
 
     return len(ids)
 
-def ingest_all(*, refresh: bool = False) -> dict[str, int]:
+def ingest_all(*, refresh: bool = False, rebuild: bool = False) -> dict[str, int]:
     
     # Upsert is idempotent on id, so re-running refreshes in place
+
+    if rebuild:
+        vector_store.reset_collections()
 
     fb = FootballDataClient()
     guardian = GuardianClient()
@@ -221,4 +224,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Ingest WC data into the vector store.")
     parser.add_argument("--refresh", action="store_true",
                         help="bypass the raw cache and refetch from the APIs")
-    ingest_all(refresh=parser.parse_args().refresh)
+    parser.add_argument("--rebuild", action="store_true",
+                        help="drop and recreate the collections before ingesting")
+    ingest_all(refresh=parser.parse_args().refresh, rebuild=parser.parse_args().rebuild)

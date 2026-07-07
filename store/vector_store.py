@@ -119,3 +119,16 @@ def list_documents(collection_name: str) -> dict:
     
     return _get_collection(collection_name).get(include=["metadatas"])
  
+def reset_collections() -> None:
+    client = _get_client()
+    
+    for name in COLLECTIONS:
+        try:
+            client.delete_collection(name)
+        except Exception:
+            pass
+        
+        _get_collection(name)
+    
+    print(f"[vector_store] Reset collections: {', '.join(COLLECTIONS)}")
+ 

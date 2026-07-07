@@ -8,12 +8,9 @@ Shoutout to the Guardian Open Platform, seriously. I thought I was going to have
 but the API actually gives us plain-text article bodies (`bodyText`), so we don't even need HTML parsing.
 """
 
-import json
 import os
 from pathlib import Path
 from datetime import timedelta
-
-import requests
 
 from ingest.base_client import CachedJSONClient
 from models import Article, Match
@@ -85,18 +82,24 @@ class GuardianClient(CachedJSONClient):
     
     @staticmethod
     def _to_article(raw: dict, match_id: int) -> Article | None:
+        
         fields = raw.get("fields") or {}
         body = fields.get("bodyText")
+
         if not body:  # video pages with no usable reaction text
             return None
+        title, url = raw["webTitle"], raw["webUrl"]
+        if "how-to-watch" in url.lower() or "how to watch" in title.lower():
+            return None
+        
         return Article(
             id=raw["id"],
             match_id=match_id,  
-            title=raw["webTitle"],
+            title=title,
             body=body,
             byline=fields.get("byline"),
             article_type=GuardianClient._tone(raw.get("tags") or []),
-            url=raw["webUrl"],
+            url=url,
             published=raw["webPublicationDate"],
         )
     

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import ollama
 import argparse
 
@@ -10,7 +11,7 @@ from retrieval.retriever import retrieve
 
 
 DEFAULT_MODEL = "mistral-small3.2"
-DEFAULT_K = 6
+DEFAULT_K = 10
 NUM_CTX = 16000
 TEMPERATURE = 0.3
 
@@ -26,6 +27,8 @@ SYSTEM_PROMPT = (
     "Match your length to the question: a factual lookup deserves a crisp sentence or two; "
     "an open question about a team's campaign or history deserves a fuller narrative."
 )
+
+_CITE_RE = re.compile(r"\[(\d+)\]")
 
 def _source_key(result: SearchResult) -> str:
     return result.id.split("#", 1)[0]
@@ -59,6 +62,14 @@ def _fmt_date(iso: str | None) -> str:
     dt = datetime.fromisoformat(iso)
     return f"{dt.day} {dt.strftime('%b %Y')}"
 
+def cited_numbers(text: str) -> list[int]:
+    seen = []
+    for m in _CITE_RE.finditer(text):
+        n = int(m.group(1))
+        if n not in seen:
+            seen.append(n)
+    return seen
+
 def format_source_line(n: int, 
                        meta: dict) -> str: 
     if meta.get("layer") == "match":
@@ -75,8 +86,11 @@ def format_source_line(n: int,
         line += f" — {url}"
     return line
 
-def format_sources(sources: list[dict]) -> str:
-    body = "\n".join(format_source_line(s["n"], s["meta"]) for s in sources)
+def format_sources(sources: list[dict], cited: list[int]) -> str:
+    shown = [s for s in sources if s["n"] in cited] if cited else sources
+    if not shown:
+        shown = sources
+    body = "\n".join(format_source_line(s["n"], s["meta"]) for s in shown)
     return "Sources\n" + body
 
 def build_messages(question: str, 
@@ -139,8 +153,9 @@ def answer(question: str,
     if stream:
         print()
 
-    print("\n" + format_sources(sources))
-    return "".join(parts)
+    full = "".join(parts)
+    print("\n" + format_sources(sources, cited_numbers(full)))
+    return full
 
 def main():
     p = argparse.ArgumentParser(
